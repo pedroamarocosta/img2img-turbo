@@ -1,14 +1,31 @@
 import os
-import torch
+import argparse
 import numpy as np
 from PIL import Image
+import torch
 from torchvision import transforms
 import torchvision.transforms.functional as F
-
 from src.pix2pix_turbo import Pix2Pix_Turbo
 from src.image_prep import canny_from_pil
 
 if __name__ == "__main__":
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--input_image', type=str, required=True, help='path to the input image')
+    # parser.add_argument('--prompt', type=str, required=True, help='the prompt to be used')
+    # parser.add_argument('--model_name', type=str, default='', help='name of the pretrained model to be used')
+    # parser.add_argument('--model_path', type=str, default='', help='path to a model state dict to be used')
+    # parser.add_argument('--output_dir', type=str, default='output', help='the directory to save the output')
+    # parser.add_argument('--low_threshold', type=int, default=100, help='Canny low threshold')
+    # parser.add_argument('--high_threshold', type=int, default=200, help='Canny high threshold')
+    # parser.add_argument('--gamma', type=float, default=0.4, help='The sketch interpolation guidance amount')
+    # parser.add_argument('--seed', type=int, default=42, help='Random seed to be used')
+    # args = parser.parse_args()
+    #
+    # # only one of model_name and model_path should be provided
+    # if args.model_name == '' != args.model_path == '':
+    #     raise ValueError('Either model_name or model_path should be provided')
+    #
+    # os.makedirs(args.output_dir, exist_ok=True)
 
     # TODO: The directory to save the output.
     output_folder = "outputs"
@@ -17,21 +34,22 @@ if __name__ == "__main__":
     # model_name = "sketch_to_image_stochastic"
     # TODO: Path to a local model state dict to be used.
     model_path = ""
-    # TODO: The image preparation method.
-    image_prep = "resize_512x512"
     # TODO: The canny edge detection low threshold.
     low_threshold = 75
     # TODO: The canny edge detection high threshold.
-    high_threshold = 175
+    high_threshold = 200
     # TODO: The sketch interpolation guidance amount.
     gamma = 0.4
     # TODO: The random seed to be used.
     seed = 42
     # TODO: The prompt to be used, also useful as caption. It is required when loading a custom model_path.
-    prompt = "A rainy day in traffic."
+    prompt = "A rainy day in traffic"
     # TODO: The image source folder to translate from. Should be adjusted to the model name.
     input_folder = "inputs"
-    subset_folder = "synthetic_images"
+    subset_folder = "clear_images"
+    # subset_folder = "day_images"
+    # subset_folder = "night_images"
+    # subset_folder = "synthetic_images"
     image_files = [os.path.join(dp, f) for (dp, dn, fn) in os.walk(rf"{input_folder}\{subset_folder}") for f in fn]
 
     # initialize the model
@@ -44,15 +62,14 @@ if __name__ == "__main__":
         new_width = input_image.width - input_image.width % 8
         new_height = input_image.height - input_image.height % 8
         input_image = input_image.resize((new_width, new_height), Image.LANCZOS)
-        caption = prompt.replace(' ', '_').replace('.', '')
-        name = f'[Pix2Pix_Turbo]_[{caption}]_{os.path.basename(image_file)}'
+        name = f"[CycleGAN_Turbo]_[´{prompt}´]_{os.path.basename(image_file)}"
 
         # translate the image
         with torch.no_grad():
             if model_name == 'edge_to_image':
                 canny = canny_from_pil(input_image, low_threshold, high_threshold)
                 canny_viz_inv = Image.fromarray(255 - np.array(canny))
-                canny_viz_inv.save(os.path.join(output_folder, name.replace('.png', '_canny.png')))
+                canny_viz_inv.save(os.path.join(output_folder, name.replace('.', '_canny.')))
                 c_t = F.to_tensor(canny).unsqueeze(0).cuda()
                 output_image = model(c_t, prompt)
 
@@ -70,5 +87,5 @@ if __name__ == "__main__":
 
             output_pil = transforms.ToPILImage()(output_image[0].cpu() * 0.5 + 0.5)
 
-        # save the output image
+        # Save the output image
         output_pil.save(os.path.join(output_folder, name))
