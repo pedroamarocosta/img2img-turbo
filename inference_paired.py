@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # TODO: The random seed to be used.
     seed = 42
     # TODO: The prompt to be used, also useful as caption. It is required when loading a custom model_path.
-    prompt = "A rainy day in traffic"
+    prompt = "A sunny day in a rural road surrounded by a garden field"
     # TODO: The image source folder to translate from. Should be adjusted to the model name.
     input_folder = "inputs"
     subset_folder = "other_samples"
