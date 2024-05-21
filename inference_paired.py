@@ -46,7 +46,8 @@ if __name__ == "__main__":
     prompt = "A rainy day in traffic"
     # TODO: The image source folder to translate from. Should be adjusted to the model name.
     input_folder = "inputs"
-    subset_folder = "clear_images"
+    subset_folder = "other_samples"
+    # subset_folder = "clear_images"
     # subset_folder = "day_images"
     # subset_folder = "night_images"
     # subset_folder = "synthetic_images"
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         new_width = input_image.width - input_image.width % 8
         new_height = input_image.height - input_image.height % 8
         input_image = input_image.resize((new_width, new_height), Image.LANCZOS)
-        name = f"[CycleGAN_Turbo]_[´{prompt}´]_{os.path.basename(image_file)}"
+        name = f"[Pix2Pix_Turbo]_[´{prompt}´]_{os.path.basename(image_file)}"
 
         # translate the image
         with torch.no_grad():

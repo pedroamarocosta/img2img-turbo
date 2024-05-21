@@ -51,8 +51,9 @@ if __name__ == "__main__":
     direction = None
     # TODO: The image source folder to translate from. Should be adjusted to the model name.
     input_folder = "inputs"
+    subset_folder = "other_samples"
     # subset_folder = "clear_images"
-    subset_folder = "day_images"
+    # subset_folder = "day_images"
     # subset_folder = "night_images"
     # subset_folder = "synthetic_images"
     image_files = [os.path.join(dp, f) for (dp, dn, fn) in os.walk(rf"{input_folder}\{subset_folder}") for f in fn]
