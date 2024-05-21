@@ -31,15 +31,15 @@ if __name__ == "__main__":
     #     assert args.direction is None, 'Direction is not required when loading a pretrained model.'
 
     # TODO: Name of the pretrained model to be used.
-    # model_name = "clear_to_rainy"
-    model_name = "day_to_night"
+    model_name = "clear_to_rainy"
+    # model_name = "day_to_night"
     # model_name = "night_to_day"
     # model_name = "rainy_to_clear"
     # TODO: The directory to save the output.
     output_folder = "outputs"
     # TODO: Path to a local model state dict to be used.
-    # model_path = "checkpoints/clear2rainy.pkl"
-    model_path = "checkpoints/day2night.pkl"
+    model_path = "checkpoints/clear2rainy.pkl"
+    # model_path = "checkpoints/day2night.pkl"
     # model_path = "checkpoints/night2day.pkl"
     # model_path = "checkpoints/rainy2clear.pkl"
     # TODO: The prompt to be used, also useful as caption. It is required when loading a custom model_path.
